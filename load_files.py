@@ -11,7 +11,6 @@ def load_dataset():
  np.random.shuffle(dataset)
  input,output =  dataset[:,:4],dataset[:,-1:]
  train_data_x,test_data_x,train_output_y,test_output_y = input[:140],input[-10:],output[:140],output[-10:]
- pdb.set_trace()
  return  train_data_x,test_data_x,train_output_y,test_output_y
 
 load_dataset()
