@@ -3,7 +3,6 @@ from load_files import load_dataset
 import pdb
 
 train_data_x, test_data_x, train_output_y, test_output_y = load_dataset()
-
 test_output_y[test_output_y == 'Iris-setosa'] = 1
 test_output_y[test_output_y != 1] = 0
 train_output_y[train_output_y == 'Iris-setosa'] = 1
