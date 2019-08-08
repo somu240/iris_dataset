@@ -14,10 +14,10 @@ print("train_set_y shape: " + str(train_output_y.shape))
 print("test_set_x shape: " + str(test_data_x.shape))
 print("test_set_y shape: " + str(test_output_y.shape))
 
-train_data_x = train_data_x.reshape(train_data_x.shape[0],-1).T
-test_data_x= test_data_x.reshape(test_data_x.shape[0],-1).T
-train_output_y= train_output_y.reshape(train_output_y.shape[0],-1).T
-test_output_y= test_output_y.reshape(test_output_y.shape[0],-1).T
+train_data_x = train_data_x.astype(float).reshape(train_data_x.shape[0],-1).T
+test_data_x= test_data_x.astype(float).reshape(test_data_x.shape[0],-1).T
+train_output_y= train_output_y.astype(float).reshape(train_output_y.shape[0],-1).T
+test_output_y= test_output_y.astype(float).reshape(test_output_y.shape[0],-1).T
 
 def sigmoid(z):
     s = 1 / (1 + np.e ** -z)
@@ -35,10 +35,8 @@ def propagate(w, b, X, Y):
     m = X.shape[1]
     # FORWARD PROPAGATION (FROM X TO COST)
     A = sigmoid(np.dot(w.T, X) + b)  # compute activation
-    try:
-     cost = np.sum((Y * np.log(A) + (1 - Y) * np.log(1 - A))) / -m
-    except Exception:
-      pdb.post_mortem()
+    cost = np.sum((Y * np.log(A) + (1 - Y) * np.log(1 - A))) / -m
+
 
     # BACKWARD PROPAGATION (TO FIND GRAD)
     dw = (np.dot(X, (A - Y).T)) / m
@@ -90,7 +88,7 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 def predict(w, b, X):
     m = X.shape[1]
     Y_prediction = np.zeros((1, m))
-    w = w.reshape(X.shape[1], 1)
+    w = w.reshape(X.shape[0], 1)
 
     # Compute vector "A" predicting the probabilities of a cat being present in the picture
     A = sigmoid(np.dot(w.T, X) + b)
@@ -142,7 +140,7 @@ learning_rates = [0.01, 0.001, 0.0001]
 models = {}
 for i in learning_rates:
     print("learning rate is: " + str(i))
-    models[str(i)] = model(train_data_x, test_data_x, test_output_y, train_output_y, num_iterations=1500,
+    models[str(i)] = model(train_data_x, train_output_y, test_data_x, test_output_y, num_iterations=1500,
                            learning_rate=i,
                            print_cost=False)
     print('\n' + "-------------------------------------------------------" + '\n')
