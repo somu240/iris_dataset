@@ -33,6 +33,7 @@ def initialize_with_zeros(dim):
 
 def propagate(w, b, X, Y):
     m = X.shape[0]
+    pdb.set_trace()
     # FORWARD PROPAGATION (FROM X TO COST)
     A = sigmoid(np.dot(w.T, X) + b)  # compute activation
     cost = np.sum((Y * np.log(A) + (1 - Y) * np.log(1 - A))) / -m
@@ -82,12 +83,6 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
     return params, grads, costs
 
-
-params, grads, costs = optimize(w, b, X, Y, num_iterations=100, learning_rate=0.009, print_cost=False)
-print("w = " + str(params["w"]))
-print("b = " + str(params["b"]))
-print("dw = " + str(grads["dw"]))
-print("db = " + str(grads["db"]))
 
 
 def predict(w, b, X):
