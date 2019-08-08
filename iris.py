@@ -14,14 +14,14 @@ print("train_set_y shape: " + str(train_output_y.shape))
 print("test_set_x shape: " + str(test_data_x.shape))
 print("test_set_y shape: " + str(test_output_y.shape))
 
+train_data_x = train_data_x.reshape(train_data_x.shape[0],-1).T
+test_data_x= test_data_x.reshape(test_data_x.shape[0],-1).T
+train_output_y= train_output_y.reshape(train_output_y.shape[0],-1).T
+test_output_y= test_output_y.reshape(test_output_y.shape[0],-1).T
 
 def sigmoid(z):
     s = 1 / (1 + np.e ** -z)
     return s
-
-
-print("sigmoid([0, 2]) = " + str(sigmoid(np.array([0, 2]))))
-
 
 def initialize_with_zeros(dim):
     w = np.zeros((dim, 1))
@@ -32,11 +32,13 @@ def initialize_with_zeros(dim):
 
 
 def propagate(w, b, X, Y):
-    m = X.shape[0]
-    pdb.set_trace()
+    m = X.shape[1]
     # FORWARD PROPAGATION (FROM X TO COST)
     A = sigmoid(np.dot(w.T, X) + b)  # compute activation
-    cost = np.sum((Y * np.log(A) + (1 - Y) * np.log(1 - A))) / -m
+    try:
+     cost = np.sum((Y * np.log(A) + (1 - Y) * np.log(1 - A))) / -m
+    except Exception:
+      pdb.post_mortem()
 
     # BACKWARD PROPAGATION (TO FIND GRAD)
     dw = (np.dot(X, (A - Y).T)) / m
@@ -86,7 +88,7 @@ def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
 
 def predict(w, b, X):
-    m = X.shape[0]
+    m = X.shape[1]
     Y_prediction = np.zeros((1, m))
     w = w.reshape(X.shape[1], 1)
 
@@ -107,7 +109,7 @@ def predict(w, b, X):
 
 def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0.005, print_cost=True):
     # initialize parameters with zeros (≈ 1 line of code)
-    w, b = initialize_with_zeros(X_train.shape[1])
+    w, b = initialize_with_zeros(X_train.shape[0])
     # Gradient descent (≈ 1 line of code)
     parameters, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
 
